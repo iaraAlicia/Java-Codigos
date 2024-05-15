@@ -1,0 +1,106 @@
+//CODIGO VERIFICA - MELHORAR DEPOIS
+//CODIGO TAMANHO - NÃO PRECISA SER MELHORADO
+
+package com.loiane.estruturadados.vetor;
+
+import java.util.Arrays;
+
+public class Vetor {
+
+	private String[] elementos;
+	private int tamanho;
+
+	public Vetor(int capacidade) {
+		this.elementos = new String[capacidade];
+		this.tamanho = 0;
+	}
+
+//ADICIONA codigo-melhorado
+public void adicionaMelhorado(String elemento){
+		if(this.tamanho < this.elementos.length) {
+			this.elementos[this.tamanho] = elemento;
+			
+		}else {
+			this.aumentaCapacidade();
+			this.elementos[this.tamanho] = elemento;
+			
+		}
+		this.tamanho++;
+	}
+
+//IMPRIME codigo melhorado
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append("[");
+		for( int i=0; i < tamanho-1; i++) {
+			s.append(this.elementos[i]);
+			s.append(", ");
+		}
+		if( this.tamanho > 0) {
+			s.append( this.elementos[this.tamanho-1] );
+		}
+		s.append("]");
+		return s.toString();
+	}
+
+	//BUSCA codigo melhorado
+	public String buscaLoiane(int posicao) {
+		if(!(posicao >=0 && posicao > tamanho)) {
+			throw new IllegalArgumentException("posição invalida"); 
+		}
+		return this.elementos[posicao];
+	}
+
+
+-------------------------------------------------- CODIGOS NOVOS E MAIS DIFÍCEIS ------------------------------------------------ 
+  os codigo as baixo, podem ser variações dos a cima, melhorados, mais complecos ou com a composição de mais de um codigo simples
+
+	//AUMENTACAPACIDADE verificar se tamanho do vetor é igual a 
+	//capacidade criar um novo vetor que é 2* maior que o vetor
+	//elementos colocar os elementos do vetor anterior no novo 
+	//vetor depois fazer o novo vetor subistituir o antigo.
+	public void aumentaCapacidade() {
+		if(this.tamanho == this.elementos.length) {
+			String[] elementosNovos = new String[this.elementos.length*2];
+			for(int i=0; i<this.elementos.length; i++) {
+				elementosNovos[i] = this.elementos[i];
+			}
+			this.elementos = elementosNovos;
+		}
+	}
+	
+//ADICIONAPOS verificar se a posição e valida, percorre o vetor
+//do último elemento até a posição que quer inseri um novo elemento
+//em cada rotação adicionar o elemento[i] na proxima casa, exemplo:
+//15 vai pra 16, e por vai. Adicionar o elemento na posição escolhida
+//e incrementar a variável tamanho.
+//nele tem vefificação de posição, e AUMENTACAPACIDADE.
+	public boolean adiconaPor(int posicao, String elemento) {
+		if(posicao < 0 && posicao >= tamanho) {
+			throw new IllegalArgumentException("posicação invalida");
+		}
+		if(this.tamanho == this.elementos.length) {
+			this.aumentaCapacidade();
+		}
+		for(int i=this.tamanho-1; i >=posicao;i--){
+			this.elementos[i+1] = this.elementos[i];
+		}
+		this.elementos[posicao] = elemento;
+		this.tamanho ++;
+		return true;
+	}
+
+  //REMOVE, verifaca se a posição e valida, percorre o vetor
+  //vai até a posição de forma crescente, faz todos os elementos
+  //voltarem uma casa cobrindo o numero que devera ser apagado
+  //e por fim decrementa o tamanho, já que um elemento foi apagado
+	public void remove(int posicao) {
+		if((posicao < 0) && (posicao >= this.tamanho)){
+			throw new IllegalArgumentException("posicação invalida");
+		}
+		for(int i=posicao;i<tamanho-1;i++) {
+			this.elementos[i] = this.elementos[i+1];
+		}
+		tamanho--;
+	}
+	
