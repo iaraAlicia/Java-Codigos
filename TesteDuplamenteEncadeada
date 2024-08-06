@@ -1,0 +1,44 @@
+package com.loiane.estruturadados.vetor.test;
+
+
+import com.loiane.estruturadados.vetor.ListaDuplamenteEncadeada;
+
+
+public class  TesteDuplamenteEncadeada {
+
+	public static void main(String[] args) {
+		ListaDuplamenteEncadeada<Integer> lista = new ListaDuplamenteEncadeada<>();
+		
+		lista.adiciona(1);
+		lista.adiciona(2);
+		lista.adiciona(2);
+		lista.adiciona(2);
+		lista.adiciona(03);
+	
+		
+		System.out.println("tamanho da lista:" + lista.getTamanho());
+		lista.adicionaInicio(4);
+		lista.adicionaNoMeio(2);
+		System.out.println("lista inicial" + lista);
+		lista.imprimeReverso();
+		lista.removerElemento(2);
+		System.out.println("lista inicial" + lista);
+		lista.inverteLista();
+		System.out.println("lista invertida" + lista);
+		System.out.println("quantas vezes aparece o numero 2 :" + lista.contarOcorrencias(2));
+		
+		
+//		System.out.println("busca na lista por elemento: " + lista.buscaElemento(1));
+//		System.out.println("busca na lista por posição: " + lista.buscaPosicao(2));
+//
+//	
+//		lista.removeInicio();
+//		System.out.println("remove do inicio" + lista);
+//		lista.removeFinal();
+//		System.out.println("remove no Final" + lista);
+//		lista.limpa();	
+//		System.out.println("lista limpa" + lista);
+
+	}
+
+}
