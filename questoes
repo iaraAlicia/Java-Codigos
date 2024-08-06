@@ -1,0 +1,56 @@
+Enserir um elemento e a lista continua ordenada
+public void insereOrdenado(T elemento) {
+    No<T> novoNo = new No<>(elemento);
+
+    if (this.tamanho == 0) {
+        this.inicio = novoNo;
+        this.ultimo = novoNo;
+    } else if (((Comparable<T>) this.inicio.getElemento()).compareTo(elemento) >= 0) {
+        novoNo.setProximo(this.inicio);
+        this.inicio.setAnterior(novoNo);
+        this.inicio = novoNo;
+    } else if (((Comparable<T>) this.ultimo.getElemento()).compareTo(elemento) <= 0) {
+        novoNo.setAnterior(this.ultimo);
+        this.ultimo.setProximo(novoNo);
+        this.ultimo = novoNo;
+    } else {
+        No<T> atual = this.inicio;
+        while (atual != null && ((Comparable<T>) atual.getElemento()).compareTo(elemento) < 0) {
+            atual = atual.getProximo();
+        }
+        novoNo.setProximo(atual);
+        novoNo.setAnterior(atual.getAnterior());
+        atual.getAnterior().setProximo(novoNo);
+        atual.setAnterior(novoNo);
+    }
+
+    this.tamanho++;
+}
+
+Concatenar listas
+ListaEncadeada<Integer> listaA = new ListaEncadeada<>();
+listaA.adiciona(1);
+listaA.adiciona(2);
+listaA.adiciona(3);
+
+ListaEncadeada<Integer> listaB = new ListaEncadeada<>();
+listaB.adiciona(4);
+listaB.adiciona(5);
+listaB.adiciona(6);
+
+listaA.concatena(listaB);
+
+// listaA agora contém [1, 2, 3, 4, 5, 6]
+
+Clonar lista
+public ListaEncadeada<T> clonaLista() {
+    ListaEncadeada<T> novaLista = new ListaEncadeada<>();
+    No<T> atual = this.inicio;
+
+    while (atual != null) {
+        novaLista.adiciona(atual.getElemento());
+        atual = atual.getProximo();
+    }
+
+    return novaLista;
+}
