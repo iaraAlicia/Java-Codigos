@@ -1,0 +1,332 @@
+package com.loiane.estruturadados.vetor;
+
+public class ListaDuplamenteEncadeada<T> {
+
+    private No<T> inicio;
+    private No<T> ultimo;
+    private int tamanho = 0;
+
+    public void adiciona(T elemento) {
+        No<T> celula = new No<T>(elemento);
+        if (this.tamanho == 0) {
+            this.inicio = celula;
+        } else {
+            this.ultimo.setProximo(celula);
+            celula.setAnterior(this.ultimo);  // Referencia para o nó anterior
+        }
+        this.ultimo = celula;
+        this.tamanho++;
+    }
+
+    public void adicionaInicio(T elemento) {
+        No<T> novoNo = new No<>(elemento);
+        if (this.tamanho == 0) {
+            this.inicio = novoNo;
+            this.ultimo = novoNo;
+        } else {
+            novoNo.setProximo(this.inicio);
+            this.inicio.setAnterior(novoNo);
+            this.inicio = novoNo;
+        }
+        this.tamanho++;
+    }
+
+    public int getTamanho() {
+        return this.tamanho;
+    }
+
+    public int buscaElemento(T elemento) {
+        int pos = 0;
+        for (No<T> Noatual = this.inicio; Noatual != null;) {
+            if (Noatual.getElemento().equals(elemento)) {
+                return pos;
+            }
+            pos++;
+            Noatual = Noatual.getProximo();
+        }
+        return -1;
+    }
+
+    public No<T> buscaPosicao(int posicao) {
+        if (!(posicao >= 0 && posicao < this.tamanho)) {
+            throw new IllegalArgumentException("posição inválida");
+        }
+        No<T> noAtual = this.inicio;
+        for (int i = 0; i < posicao; i++) {
+            noAtual = noAtual.getProximo();
+        }
+        return noAtual;
+    }
+
+    public void adicionamelhor(int posicao, T elemento) {
+        if (!(posicao >= 0 && posicao <= this.tamanho)) {
+            throw new IllegalArgumentException("posição inválida");
+        }
+
+        if (posicao == 0) {
+            this.adicionaInicio(elemento);
+        } else if (posicao == this.tamanho) {
+            this.adiciona(elemento);
+        } else {
+            No<T> noAtual = this.buscaPosicao(posicao);
+            No<T> noAnterior = noAtual.getAnterior();
+            No<T> novoNo = new No<>(elemento, noAtual, noAnterior);
+            noAtual.setAnterior(novoNo);
+            noAnterior.setProximo(novoNo);
+            this.tamanho++;
+        }
+    }
+
+    public void limpa() {
+        for (No<T> atual = this.inicio; atual != null;) {
+            No<T> proximo = atual.getProximo();
+            atual.setElemento(null);
+            atual.setProximo(null);
+            atual.setAnterior(null);
+            atual = proximo;
+        }
+        this.inicio = null;
+        this.ultimo = null;
+        tamanho = 0;
+    }
+
+    public T removeInicio() {
+        if (this.tamanho == 0) {
+            throw new RuntimeException("LISTA_VAZIA");
+        }
+        T removido = this.inicio.getElemento();
+        this.inicio = this.inicio.getProximo();
+        if (this.inicio != null) {
+            this.inicio.setAnterior(null);
+        } else {
+            this.ultimo = null;
+        }
+        this.tamanho--;
+        return removido;
+    }
+
+    public T removeFinal() {
+        if (this.tamanho == 0) {
+            throw new RuntimeException("LISTA_VAZIA");
+        }
+        T removido = this.ultimo.getElemento();
+        this.ultimo = this.ultimo.getAnterior();
+        if (this.ultimo != null) {
+            this.ultimo.setProximo(null);
+        } else {
+            this.inicio = null;
+        }
+        this.tamanho--;
+        return removido;
+    }
+
+    public T remove(int posicao) {
+        if (!(posicao >= 0 && posicao < this.tamanho)) {
+            throw new IllegalArgumentException("posição inválida");
+        }
+
+        if (posicao == 0) {
+            return this.removeInicio();
+        }
+        if (posicao == this.tamanho - 1) {
+            return this.removeFinal();
+        }
+        No<T> noAtual = this.buscaPosicao(posicao);
+        No<T> noAnterior = noAtual.getAnterior();
+        No<T> noProximo = noAtual.getProximo();
+        noAnterior.setProximo(noProximo);
+        noProximo.setAnterior(noAnterior);
+        noAtual.setProximo(null);
+        noAtual.setAnterior(null);
+        this.tamanho--;
+        return noAtual.getElemento();
+    }
+
+    @Override
+    public String toString() {
+        if (this.tamanho == 0) {
+            return "[]";
+        }
+        StringBuilder builder = new StringBuilder("[");
+        No<T> atual = this.inicio;
+
+        for (int i = 0; i < this.tamanho - 1; i++) {
+            builder.append(atual.getElemento()).append(", ");
+            atual = atual.getProximo();
+        }
+        builder.append(atual.getElemento()).append("]");
+        return builder.toString();
+    }
+    
+
+  //Explicação das Mudanças
+  //ClasseNo :
+  //
+  //Adicionei uma referência anteriore métodos getters e setters para ela.
+  //Modifiquei os construtores para inicializar a referência anterior.
+  //Métodoadiciona :
+  //
+  //Atualizei para configurar a referência anteriordo novo nó para ponta para o antigo último nó.
+  //MétodoadicionaInicio :
+  //
+  //Atualizei para configurar a referência anteriordo antigo nó inicial para apontar para o novo nó.
+  //Métodoadicionamelhor :
+  //
+  //Adicionei lógica para ajustar as referências anteriore proximoos nós envolvidos na inserção.
+  //MétodoremoveInicio :
+  //
+  //Ajustei para atualizar a referência anteriordo novo nó inicial para null.
+  //MétodoremoveFinal :
+  //
+  //Ajustei para atualizar a referência proximodo novo nó final para null.
+  //Métodoremove :
+  //
+  //Ajustei para atualizar as referências anteriore proximoos nós adjacentes ao nó removido.
+
+
+// -------------------------------	Perguntas: -------------------------------------  
+        
+//    	Pergunta:
+//    	Implemente um método adicionaNoMeio que insere um elemento no meio da 
+//    	lista duplamente encadeada. Se a lista tiver um número ímpar de 
+//    	elementos, o novo elemento deve ser inserido após o elemento do meio.
+    
+	    public void adicionaNoMeio(T elemento) {
+	        int meio = this.tamanho / 2;
+	        adicionamelhor(meio, elemento);
+	    }
+	    
+//	    Pergunta:
+//	    Escreva um método imprimeReverso que imprime os elementos de uma lista 
+//	    duplamente encadeada do último para o primeiro.
+	    
+	    public void imprimeReverso() {
+	        if (this.tamanho == 0) {
+	            System.out.println("[]");
+	            return;
+	        }
+	        StringBuilder builder = new StringBuilder("[");
+	        No<T> atual = this.ultimo;
+
+	        for (int i = 0; i < this.tamanho - 1; i++) {
+	            builder.append(atual.getElemento()).append(", ");
+	            atual = atual.getAnterior();
+	        }
+	        builder.append(atual.getElemento()).append("]");
+	        System.out.println(builder.toString());
+	    }
+
+    
+
+//	    Pergunta:
+//	    Implemente um método removerElemento que remove a primeira ocorrência 
+//	    de um elemento específico da lista duplamente encadeada.
+
+//	    Resposta:
+	    public boolean removerElemento(T elemento) {
+	        No<T> atual = this.inicio;
+	        for (int i = 0; i < this.tamanho; i++) {
+	            if (atual.getElemento().equals(elemento)) {
+	                remove(i);
+	                return true;
+	            }
+	            atual = atual.getProximo();
+	        }
+	        return false;
+	    }
+	    
+//	    Questão 4
+//	    Pergunta:
+//	    Escreva um método inverteLista que inverte a ordem dos elementos na lista 
+//	    duplamente encadeada.
+	    public void inverteLista() {
+	        No<T> atual = this.inicio;
+	        No<T> temp = null;
+
+	        while (atual != null) {
+	            temp = atual.getAnterior();
+	            atual.setAnterior(atual.getProximo());
+	            atual.setProximo(temp);
+	            atual = atual.getAnterior();
+	        }
+
+	        if (temp != null) {
+	            this.inicio = temp.getAnterior();
+	        }
+	    }
+//	    Questão 5
+//	    Pergunta:
+//	    Implemente um método contarOcorrencias que conta quantas vezes um elemento
+//	    específico aparece na lista duplamente encadeada.
+	    
+	    public int contarOcorrencias(T elemento) {
+	        int contador = 0;
+	        No<T> atual = this.inicio;
+
+	        while (atual != null) {
+	            if (atual.getElemento().equals(elemento)) {
+	                contador++;
+	            }
+	            atual = atual.getProximo();
+	        }
+
+	        return contador;
+	    }
+
+	    
+//	    ordena lista
+	    
+	    public void ordenaLista() {
+	        if (this.tamanho <= 1) {
+	            return;
+	        }
+
+	        boolean trocado;
+	        do {
+	            trocado = false;
+	            No<T> atual = this.inicio;
+
+	            while (atual != null && atual.getProximo() != null) {
+	                No<T> proximo = atual.getProximo();
+	                if (((Comparable<T>) atual.getElemento()).compareTo(proximo.getElemento()) > 0) {
+	                    // Trocar elementos
+	                    T temp = atual.getElemento();
+	                    atual.setElemento(proximo.getElemento());
+	                    proximo.setElemento(temp);
+	                    trocado = true;
+	                }
+	                atual = atual.getProximo();
+	            }
+	        } while (trocado);
+	    }
+
+//	    remove todas as ocorrencia
+	    public void removerTodasOcorrencias(T elemento) {
+	        No<T> atual = this.inicio;
+
+	        while (atual != null) {
+	            No<T> proximo = atual.getProximo();
+
+	            if (atual.getElemento().equals(elemento)) {
+	                if (atual.getAnterior() != null) {
+	                    atual.getAnterior().setProximo(atual.getProximo());
+	                } else {
+	                    this.inicio = atual.getProximo();
+	                }
+
+	                if (atual.getProximo() != null) {
+	                    atual.getProximo().setAnterior(atual.getAnterior());
+	                } else {
+	                    this.ultimo = atual.getAnterior();
+	                }
+
+	                this.tamanho--;
+	            }
+
+	            atual = proximo;
+	        }
+	    }
+
+	    
+    
+}
