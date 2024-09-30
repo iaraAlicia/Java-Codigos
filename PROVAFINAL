@@ -1,0 +1,340 @@
+package com.loiane.estruturadados.vetor;
+
+public class FilaEncadeada {
+    private NoFila inicio;
+    private NoFila fim;
+    private int totalDeElementos;
+    
+    //CRIA A FILA
+    public FilaEncadeada() {
+        this.inicio = null;
+        this.fim = null;
+        this.totalDeElementos = 0;
+    }
+    
+    //ENFILEIRAR - INSERIR
+    public void enqueue(Object elemento) {
+        NoFila novo = new NoFila(elemento);
+        if(this.isEmpty()) {
+            this.inicio = novo;
+        }else {
+            this.fim.setProximo(novo);
+        }
+        this.fim = novo;
+        this.totalDeElementos++;
+    }
+    //DESENFILEIRAR - REMOVER
+    public void dequeue() {
+        if(!this.isEmpty()) {
+            this.inicio = this.inicio.getProximo();
+            this.totalDeElementos--;
+            if(totalDeElementos == 0) this.fim = null;
+        }       
+    }
+    
+    //VERIFICA SE É VAZIA
+    public boolean isEmpty() {
+        return this.totalDeElementos==0;
+    }
+    
+    //TAMANHO DA LISTA
+    public int size() {
+        return this.totalDeElementos;
+    }
+    
+    //PRIMEIRO DA FILA
+    public Object front() {
+        return this.inicio.getElemento();
+    }   
+    
+    //TOSTRING - IMPRIMIR
+     @Override
+        public String toString() {
+            if(this.totalDeElementos==0) {
+                return "[]";
+            }
+            StringBuilder builder = new StringBuilder("[");
+            NoFila atual = this.inicio;
+            for(int i=0; i<this.totalDeElementos-1; i++) {
+                builder.append(atual.getElemento());
+                builder.append(", ");
+                atual = atual.getProximo();
+            }
+            builder.append(atual.getElemento());
+            builder.append("]");
+            
+            //System.out.println("Início: "+this.inicio.getElemento());
+            //System.out.println("Fim: "+this.fim.getElemento());
+            return builder.toString();
+        }
+    
+    public NoFila getInicio() {
+        return inicio;
+    }
+    public void setInicio(NoFila inicio) {
+        this.inicio = inicio;
+    }
+    public NoFila getFim() {
+        return fim;
+    }
+    public void setFim(NoFila fim) {
+        this.fim = fim;
+    }
+    public int getTamanho() {
+        return totalDeElementos;
+    }
+    public void setTamanho(int tamanho) {
+        this.totalDeElementos = tamanho;
+    }
+    
+
+    public int Ordena(NoFila atual) {
+        NoFila anterior = null;
+        
+        while (atual != null) {
+            if(this.isEmpty()) {
+                this.inicio = atual;
+            }else if ((int) atual.getElemento() < atual.getProximo().getElemento) {
+                this.anterior(novo)       
+                anterior.setProximo(novo);                                   
+            }else  ((int) atual.getElemento() > atual.getProximo().getElemento) 
+                this.setProximo(atual)
+            else {
+            atual = atual.getProximo(); // Move para o próximo nó
+        }
+
+        NoFila atual = this.getInicio(); // Começa com o primeiro elemento
+        for (int i = 1; i <= this.topo; i++) {
+            if ((int) this.elementos[i] > (int) atual) {
+                atual = this.elementos[i];
+            }
+        }
+
+        retun this.MediaElementos();
+    }
+             
+
+        public int MediaElementos() {
+        NoFila atual = this.getInicio();
+
+        int soma = 0;
+        int media = 0;
+        while (atual != null) {
+            soma += (int) atual.getElemento(); // Somar cada elemento
+            atual = atual.getProximo(); 
+        }
+        media = (soma / 2);
+        return media;
+    }
+
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package com.loiane.estruturadados.vetor;
+
+public class ListaEncadeada {
+
+    private NoLista inicio;
+    private NoLista fim;
+    public NoLista getInicio() {
+        return inicio;
+    }
+
+    private int totalDeElementos;
+    
+    public void adicionaNoInicio(Object elemento) {
+        NoLista novo = new NoLista(elemento, this.inicio);
+        this.inicio = novo;
+        if(this.totalDeElementos == 0) {
+            this.fim = novo;
+        }
+        this.totalDeElementos++;
+    }
+    
+    
+    public void adicionaNoFim(Object elemento) {
+        NoLista novo = new NoLista(elemento);
+        if(this.totalDeElementos == 0) {
+            this.adicionaNoInicio(elemento);
+        }else {
+            this.fim.setProximo(novo);
+            this.fim = novo;
+            this.totalDeElementos ++;
+        }
+    }
+    
+    public void adiciona(int posicao, Object elemento) {
+        if(posicao==0) {
+            this.adicionaNoInicio(elemento);
+        }else if(posicao==this.totalDeElementos-1) {
+            this.adicionaNoFim(elemento);
+        }else{                                                           // A B D E  quero inserir o C antes do D, pego a referencia do anterior dele o B    
+            NoLista anterior = this.pegaNo(posicao-1);                   // 1 2 3 4 5 a variavel anterior recebe a posição menos 1, no caso o B que ira depois referenciar o novo NO
+            NoLista novo = new NoLista(elemento, anterior.getProximo()); // a variavel novo recebe o elemento e a referencia para D dessa forma posicao 3 recebe C apontando para D
+            anterior.setProximo(novo);                                   // agora anterior B recebe proximo que é C 
+            this.totalDeElementos++;
+        }
+    }
+    
+    public void removeDoComeco() {
+        if(this.totalDeElementos>0) {
+            this.inicio = this.inicio.getProximo();
+            this.totalDeElementos--;
+        }
+        if(this.totalDeElementos==0) this.fim = null;   
+    }
+    
+    public void removeDoFinal() {
+        if(this.getTotalDeElementos()==0) {
+            System.out.println("Lista vazia!");
+        }else if(this.totalDeElementos == 1) {
+            this.removeDoComeco();
+        }else {
+            NoLista anterior = this.pegaNo(this.totalDeElementos-2);
+            anterior.setProximo(null);
+            this.fim = anterior;
+            this.totalDeElementos--;
+        }
+    }
+    
+     public boolean remove(int posicao) {
+        if(this.posicaoValida(posicao)) {
+            if(posicao == 0) {
+                this.removeDoComeco();
+                return true;
+            }else if(posicao == this.totalDeElementos-1) {
+                this.removeDoFinal();
+                return true;
+            }else {
+                NoLista anterior  = this.pegaNo(posicao-1);
+                NoLista atual = anterior.getProximo();
+                NoLista proximo = atual.getProximo();
+                anterior.setProximo(proximo);
+                this.totalDeElementos--;
+                return true;
+            }
+        }else {
+            return false;
+        }
+    }
+    
+    public NoLista pegaNo (int posicao) {
+        if(!this.posicaoValida(posicao)) {
+            throw new IllegalArgumentException("Posição Inálida!");
+        }
+        NoLista atual = this.inicio;
+        for(int i = 0; i < posicao; i++) {
+            atual = atual.getProximo();
+        }
+        return atual;
+    }
+    
+    private boolean posicaoValida(int posicao) {
+        return posicao >= 0 && posicao < this.totalDeElementos;
+    }
+    
+    public Object pega(int posicao) {
+        return this.pegaNo(posicao).getElemento();
+    }
+    
+    @Override
+    public String toString() {
+        if(this.totalDeElementos==0) {
+            return "[]";
+        }
+        StringBuilder builder = new StringBuilder("[");
+        NoLista atual = this.inicio;
+        for(int i=0; i<this.totalDeElementos-1; i++) {
+            builder.append(atual.getElemento());
+            builder.append(", ");
+            atual = atual.getProximo();
+        }
+        builder.append(atual.getElemento());
+        builder.append("]");
+        return builder.toString();
+    }
+
+    
+        public int verifica(Object elemento) {
+        NoLista atual = this.inicio;
+        while (atual != null) {
+            if (atual.getElemento().equals(elemento)) {
+                return elemento;
+            }
+            atual = atual.getProximo();
+        }
+        return -1;
+    }
+    
+    
+    
+
+    public void setInicio(NoLista inicio) {
+        this.inicio = inicio;
+    }
+
+    public NoLista getFim() {
+        return fim;
+    }
+
+    public void setFim(NoLista fim) {
+        this.fim = fim;
+    }
+    
+    public int getTotalDeElementos() {
+        return totalDeElementos;
+    }
+
+    public void setTotalDeElementos(int totalDeElementos) {
+        this.totalDeElementos = totalDeElementos;
+    }
+    
+    
+    
+//  ------------------ QUESTÃO ---------------------
+
+//  2) - Implemente um método que retorne o índice de um determinado 
+//  elemento na lista. Caso o elemento não esteja presente, retorne -1.
+    
+    
+    public ListaEncadeada semrepeticao(Object elemento) {
+        ListaEncadeada listaComuns = new ListaEncadeada(this.totalDeElementos);
+        NoLista atual = this.inicio;
+
+        while (atual != null) {
+            if (!atual.getElemento().equals()) {
+                listaComuns.adiciona(atual)
+            }else if (this.verifica(atual) > -1 && listaComuns.verifica(atual) == -1) {
+                listaComuns.adiciona(atual)
+            }
+            atual = atual.getProximo();
+        }
+        return listaComuns;
+    }
+
